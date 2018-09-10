@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cop</title>
+</head>
+<body data-userId="<%= userId %>">
+    <h1>Hello Cop <%= userId %></h1>
+    <h2>Cop Details</h2>
+    <div id="copDetails"></div>
+    <h4 id="notification">Waiting for requests....</h4>
+    <button onclick="helpCitizen()">Help Citizen</button>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        var socket = io()
+
+        var userId = document.body.getAttribute("data-userId")
+        socket.emit('join', {userId: userId})
+        $.ajax({
+            url: '/cops/info?userId=' + userId,
+            type: 'GET',
+            dataType: "json",
+            success: function(data){
+                copDetails = data.copDetails
+                copDetails.location = {
+                    address: copDetails.location.address,
+                    longitude: copDetails.location.coordinates[0],
+                    latitude: copDetails.location.coordinates[1]
+                }
+                document.getElementById('copDetails').innerHTML = JSON.stringify(data.copDetails)
+            },
+            error: function(httpRequest, status, error){
+                console.log(error)
+            }
+        })
+
+        socket.on('request-for-help', function(eventData){
+            requestDetails = eventData;
+            document.getElementById("notification").innerHTML = "Someone's life is in Danger \n" + JSON.stringify(requestDetails)
+        })
+
+        function helpCitizen(){
+            socket.emit('request-accepted', {
+                requestDetails: requestDetails,
+                copDetails: copDetails
+            })
+        }
+    </script>
+
+</body>
+</html>

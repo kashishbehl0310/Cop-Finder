@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Citizen</title>
+</head>
+<body data-userId="<%= userId %>">
+    <h1>Hello Citizen <%= userId %></h1>
+    <h4 id="notification"></h4>
+    <button onclick="requestForHelp()">Request For Help</button>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        var socket = io()
+        var userId = document.body.getAttribute('data-userId')
+        socket.emit('join', {
+            userId: userId
+        })
+
+        var requesDetails = {}
+        requesDetails = {
+            citizenId: userId,
+            location: {
+                address: 'Indiranagar, Bangalore, Karnataka, 560038, India',
+                latitude: 12.9718915,
+                longitude: 77.64115449999997
+            }
+        }
+
+        function requestForHelp(){
+            socket.emit('request-for-help', requesDetails)
+        }
+
+        socket.on('request-accepted', function(data){
+            copDetails =  data
+            document.getElementById("notification").innerHTML = "A cop is coming to rescue you! \n" + JSON.stringify(copDetails)
+        })
+    </script>
+</body>
+</html>
