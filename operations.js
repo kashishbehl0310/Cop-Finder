@@ -73,6 +73,15 @@ function updateRequest(db, requestId, copId, status, callback){
     })
 }
 
+function fetchRequest(db, callback){
+    var collection = db.collection('requestData')
+    var stream = collection.find({}, {
+        requestTime: true,
+        status: true,
+        location: true
+    }).stream()
+}
+
 exports.fetchNearestCops = fetchNearestCops
 exports.fetchCopDetails = fetchCopDetails
 exports.saveRequest = saveRequest
