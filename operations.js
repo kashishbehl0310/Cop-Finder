@@ -80,9 +80,19 @@ function fetchRequest(db, callback){
         status: true,
         location: true
     }).stream()
+
+    var requestData = [];
+
+    stream.on("data", function(request){
+        requestData.push(request)
+    })
+    stream.on("on", function(){
+        callback(requestData)
+    })
 }
 
 exports.fetchNearestCops = fetchNearestCops
 exports.fetchCopDetails = fetchCopDetails
 exports.saveRequest = saveRequest
 exports.updateRequest = updateRequest
+exports.fetchRequest = fetchRequest
