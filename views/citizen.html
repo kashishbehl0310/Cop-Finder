@@ -19,15 +19,17 @@
         Request for help
     </button>
 
-    <div id='map' style='width: 600px; height: 400px;'>
+    <div id='maps' style='width: 600px; height: 400px;'>
         <!-- Load a map here -->
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9ycobB5RiavbXpJBo0Muz2komaqqvGv0&libraries=places"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
     <script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/js/map.js"></script>
 
     <script type="text/javascript">
         var socket = io();
@@ -63,6 +65,28 @@
                 })
             }).addTo(map);
         });
+
+        var mapDiv = document.getElementById('maps');
+        console.log(mapDiv)
+        const mapOptions = {
+            center: {
+                lat: requestDetails.location.latitude,
+                lng: requestDetails.location.longitude
+            },
+            zoom: 16
+        }
+        hello()
+        loadNearest(mapOptions.center.lat, mapOptions.center.lng)
+        function makeMap(mapDiv){
+            const map = new google.maps.Map(mapDiv, mapOptions)
+            var icon = {
+                url: '/images/citizen.png',
+                scaledSize: new google.maps.Size(50, 50)
+            }
+            var marker = new google.maps.Marker({position: mapOptions.center, map: map, icon: icon})
+            console.log(map)
+        }
+        makeMap(mapDiv)
         L.mapbox.accessToken = 'pk.eyJ1Ijoia2FzaGlzaC1iZWhsIiwiYSI6ImNqbHdqb3RzazByaWkzdnBhc21xaWFlbmgifQ.wvRlT4eCwTC8E78SiFWN-g';
         //Load the map and set it to a given lat-lng
         map = L.mapbox.map('map', 'mapbox.streets');
