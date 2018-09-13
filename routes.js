@@ -3,10 +3,7 @@ var operations = require('./operations')
 function initialize(app, db, socket, io) {
     // '/cops?lat=12.9718915&&lng=77.64115449999997'
     app.get('/cops', function(req, res) {
-        /*
-            extract the latitude and longitude info from the request. 
-            Then, fetch the nearest cops using MongoDB's geospatial queries and return it back to the client.
-        */
+        
         var latitude = Number(req.query.lat);
         var longitude = Number(req.query.lng);
         operations.fetchNearestCops(db, [longitude, latitude], function(results) {
@@ -61,6 +58,30 @@ function initialize(app, db, socket, io) {
             io.sockets.in(eventData.requestDetails.citizenId).emit('request-accepted', eventData.copDetails)
         })
     })
+    app.get('/requests/info', function(req, res) {
+        operations.fetchRequests(db, function(results) {
+            var features = [];
+            for (var i = 0; i < results.length; i++) {
+                features.push({
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: results[i].location.coordinates
+                    },
+                    properties: {
+                        status: results[i].status,
+                        requestTime: results[i].requestTime,
+                        address: results[i].location.address
+                    }
+                })
+            }
+            var geoJsonData = {
+                type: 'FeatureCollection',
+                features: features
+            }
 
+            res.json(geoJsonData);
+        });
+    });
 }
 exports.initialize = initialize;

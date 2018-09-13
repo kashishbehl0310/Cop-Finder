@@ -42,11 +42,9 @@ server.listen(portNumber, () => {
             })
         })
 
-        app.get('/data.html', (req, res) => {
-            res.render('data', {
-                title: 'Data'
-            })
-        })
+        app.get('/data.html', function(req, res) {
+            res.render('data.html');
+        });
 
         io.on('connection', (socket) => {
             console.log('A user just connected')

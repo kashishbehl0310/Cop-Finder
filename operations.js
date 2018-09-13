@@ -73,26 +73,26 @@ function updateRequest(db, requestId, copId, status, callback){
     })
 }
 
-function fetchRequest(db, callback){
-    var collection = db.collection('requestData')
+function fetchRequests(db, callback) {
+    var collection = db.collection('requestData');
+    //Using stream to process potentially huge records
     var stream = collection.find({}, {
         requestTime: true,
         status: true,
         location: true
-    }).stream()
-
-    var requestData = [];
-
-    stream.on("data", function(request){
-        requestData.push(request)
-    })
-    stream.on("on", function(){
-        callback(requestData)
-    })
+    }).stream();
+    var requestsData = [];
+    stream.on('data', function(request) {
+        requestsData.push(request);
+    });
+    //Runs after results are fetched
+    stream.on('end', function() {
+        callback(requestsData);
+    });
 }
 
 exports.fetchNearestCops = fetchNearestCops
 exports.fetchCopDetails = fetchCopDetails
 exports.saveRequest = saveRequest
 exports.updateRequest = updateRequest
-exports.fetchRequest = fetchRequest
+exports.fetchRequests = fetchRequests
