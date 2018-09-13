@@ -76,7 +76,6 @@
             zoom: 16
         }
         hello()
-        loadNearest(mapOptions.center.lat, mapOptions.center.lng)
         function makeMap(mapDiv){
             const map = new google.maps.Map(mapDiv, mapOptions)
             var icon = {
@@ -84,6 +83,7 @@
                 scaledSize: new google.maps.Size(50, 50)
             }
             var marker = new google.maps.Marker({position: mapOptions.center, map: map, icon: icon})
+            loadNearest(map, mapOptions.center.lat, mapOptions.center.lng)
             console.log(map)
         }
         makeMap(mapDiv)
