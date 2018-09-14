@@ -19,7 +19,7 @@
         Request for help
     </button>
 
-    <div id='maps' style='width: 600px; height: 400px;'>
+    <div id='map' style='width: 600px; height: 400px;'>
         <!-- Load a map here -->
     </div>
 
@@ -75,7 +75,6 @@
             },
             zoom: 16
         }
-        hello()
         function makeMap(mapDiv){
             const map = new google.maps.Map(mapDiv, mapOptions)
             var icon = {
