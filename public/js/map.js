@@ -5,6 +5,7 @@ function hello(){
 function loadNearest(map, lat, lng){
     axios.get(`/cops?lat=${lat}&&lng=${lng}`)
     .then(res => {
+        // console.log(res.data)
         const cops = res.data.cops;
         if(!cops.length){
             alert('No nearby cops')
