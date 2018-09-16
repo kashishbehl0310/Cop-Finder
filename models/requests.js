@@ -18,6 +18,9 @@ const requestSchema = new mongoose.Schema({
     },
     status: {
         type: String
+    },
+    copId: {
+        type: String
     }
 })
 

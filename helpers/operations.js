@@ -39,3 +39,24 @@ exports.saveRequests = (requestDetails, callback) => {
         }
     })
 }
+
+exports.updateRequest = (acceptedRequest) => {
+   requests.findById({
+       _id: acceptedRequest.requestId
+   }, (err, results) => {
+        if(err){
+            console.log(err)
+            return err
+        }
+        results.status = acceptedRequest.status
+        results.copId = acceptedRequest.copId
+        console.log(acceptedRequest)
+        results.save((err, updatedRequest) => {
+            if(err){
+                console.log(err)
+                return err
+            }
+            console.log('success')
+        })
+   })
+}

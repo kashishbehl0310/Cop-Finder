@@ -28,4 +28,15 @@ exports.initialize = (socket, io) => {
         })
     })
     
+    socket.on('request-accepted', (eventData) => {
+        var requestId = mongoose.Types.ObjectId(eventData.requestDetails.requestId)
+        var acceptedRequest = {};
+        acceptedRequest.requestId = requestId;
+        acceptedRequest.copId = eventData.copDetails.userId;
+        acceptedRequest.status = "engaged";
+        operations.updateRequest(acceptedRequest, (results) => {
+            io.sockets.in(eventData.requestDetails.citizenId).emit('request-accepted', eventData.copDetails)
+        })
+        // console.log(requestId)
+    })
 }
