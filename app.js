@@ -16,6 +16,7 @@ mongoose.connection.on('connected', function(){
     console.log('connected')
 })
 require('./models/cop')
+require('./models/requests')
 // var routes = require('./routes'); //File that contains our endpoints
 // var mongoClient = require("mongodb").MongoClient;
 

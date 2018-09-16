@@ -1,8 +1,10 @@
 var operations = require('./operations')
+var mongoose = require('mongoose')
 
 exports.initialize = (socket, io) => {
     socket.on('request-for-help', function(eventData){
         var requestTime = new Date()
+        var requestId = mongoose.Types.ObjectId()
         var location = {
             coordinates: [
                 eventData.location.longitude,
@@ -10,10 +12,19 @@ exports.initialize = (socket, io) => {
             ],
             address: eventData.location.address
         }
-        operations.fetchNearest(location.coordinates, function(results){
-            for(var i=0; i< results.length; i++){
-                io.sockets.in(results[i].userId).emit('request-for-help', eventData)
-            }
+        var requestDetails = {};
+        requestDetails.requestId = requestId;
+        requestDetails.location = location;
+        requestDetails.requestTime = requestTime;
+        requestDetails.citizenId = eventData.citizenId;
+        requestDetails.status = "waiting";
+        operations.saveRequests(requestDetails, function(results){
+            operations.fetchNearest(location.coordinates, function(results){
+                eventData.requestId = requestId;
+                for(var i=0; i< results.length; i++){
+                    io.sockets.in(results[i].userId).emit('request-for-help', eventData)
+                }
+            })
         })
     })
 }
