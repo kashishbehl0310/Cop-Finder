@@ -40,7 +40,7 @@ exports.saveRequests = (requestDetails, callback) => {
     })
 }
 
-exports.updateRequest = (acceptedRequest) => {
+exports.updateRequest = (acceptedRequest, callback) => {
    requests.findById({
        _id: acceptedRequest.requestId
    }, (err, results) => {
@@ -50,13 +50,15 @@ exports.updateRequest = (acceptedRequest) => {
         }
         results.status = acceptedRequest.status
         results.copId = acceptedRequest.copId
-        console.log(acceptedRequest)
+        // console.log(acceptedRequest)
         results.save((err, updatedRequest) => {
             if(err){
                 console.log(err)
                 return err
+            }else{
+                callback("Issue updated")
             }
-            console.log('success')
+            // console.log('success')
         })
    })
 }

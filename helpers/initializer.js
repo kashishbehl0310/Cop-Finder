@@ -34,7 +34,7 @@ exports.initialize = (socket, io) => {
         acceptedRequest.requestId = requestId;
         acceptedRequest.copId = eventData.copDetails.userId;
         acceptedRequest.status = "engaged";
-        operations.updateRequest(acceptedRequest, (results) => {
+        operations.updateRequest(acceptedRequest, function(results){
             io.sockets.in(eventData.requestDetails.citizenId).emit('request-accepted', eventData.copDetails)
         })
         // console.log(requestId)

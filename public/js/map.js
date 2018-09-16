@@ -39,3 +39,14 @@ function locateCitizen(map, requestDetails){
     marker.place = requestDetails
 }
 // export default hello;
+
+function locateHelp(map, copDetails){
+    console.log(map, copDetails)
+    const position = {lat: copDetails.location.latitude, lng: copDetails.location.longitude}
+    const icon = {
+        url: "/images/citizen.png",
+        scaledSize: new google.maps.Size(50, 50)
+    }
+    const marker = new google.maps.Marker({map, position, icon})
+    marker.place = copDetails
+}

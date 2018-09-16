@@ -38,6 +38,7 @@
         //Empty variables to store information. This will get filled later
         var requestDetails = {};
         var copDetails = {};
+        var map;
         // var map, marker;
         requestDetails = {
             citizenId: userId,
@@ -51,21 +52,7 @@
             socket.emit('request-for-help', requestDetails);
         }
         //Listen for a 'request-accepted' event
-        socket.on('request-accepted', function(data) {
-            // copDetails = data; //Save cop details
-            // //Display Cop details
-            console.log('aaaaaaaaaaaaaaaaaaaaaaa')
-            // document.getElementById("notification").innerHTML = "A cop is coming to your rescue! \n" ;
-            // //Show cop location on the map
-
-            // // var marker = new google.maps.Marker({posit})
-            // L.marker([copDetails.location.latitude, copDetails.location.longitude], {
-            //     icon: L.icon({
-            //         iconUrl: '/images/police.png',
-            //         iconSize: [60, 28]
-            //     })
-            // }).addTo(map);
-        });
+        
 
         var mapDiv = document.getElementById('maps');
         console.log(mapDiv)
@@ -77,7 +64,7 @@
             zoom: 16
         }
         function makeMap(mapDiv){
-            const map = new google.maps.Map(mapDiv, mapOptions)
+            map = new google.maps.Map(mapDiv, mapOptions)
             var icon = {
                 url: '/images/citizen.png',
                 scaledSize: new google.maps.Size(50, 50)
@@ -87,6 +74,19 @@
             console.log(map)
         }
         makeMap(mapDiv)
+        socket.on('request-accepted', function(data) {
+            copDetails = data;
+            document.getElementById("notification").innerHTML = "A cop is coming to your rescue! \n"+JSON.stringify(copDetails);
+            // //Show cop location on the map
+            locateHelp(map, copDetails)
+            // // var marker = new google.maps.Marker({posit})
+            // L.marker([copDetails.location.latitude, copDetails.location.longitude], {
+            //     icon: L.icon({
+            //         iconUrl: '/images/police.png',
+            //         iconSize: [60, 28]
+            //     })
+            // }).addTo(map);
+        });
         
     </script>
 </body>
