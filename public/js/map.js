@@ -1,7 +1,3 @@
-function hello(){
-    console.log('file reached')
-}
-
 function loadNearest(map, lat, lng){
     axios.get(`/cops?lat=${lat}&&lng=${lng}`)
     .then(res => {
@@ -33,4 +29,13 @@ function loadNearest(map, lat, lng){
     })
 }
 
+function locateCitizen(map, requestDetails){
+    const position = {lat: requestDetails.location.latitude, lng: requestDetails.location.longitude}
+    const icon = {
+        url: '/images/citizen.png',
+        scaledSize: new google.maps.Size(50, 50)
+    }
+    const marker = new google.maps.Marker({map, position, icon})
+    marker.place = requestDetails
+}
 // export default hello;
