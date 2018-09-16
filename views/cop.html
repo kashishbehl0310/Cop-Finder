@@ -22,13 +22,12 @@
         Help Citizen
     </button>
 
-    <div id='map' style='width: 600px; height: 400px;'></div>
+    <div id='maps' style='width: 600px; height: 400px;'></div>
 
     <script src="/socket.io/socket.io.js"></script>
-
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9ycobB5RiavbXpJBo0Muz2komaqqvGv0&libraries=places"></script>    
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
-    <script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script>
+    <!-- <script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script> -->
 
     <script type="text/javascript">
         var socket = io();
@@ -41,6 +40,7 @@
         //Empty variables to store information. This will get filled later
         var requestDetails = {};
         var copDetails = {};
+        var map = {}
         var map, marker;
         //First send a GET request using JQuery AJAX and get the cop's details and save it
         $.ajax({
@@ -55,23 +55,38 @@
                     latitude: copDetails.location.coordinates[1]
                 }
                 document.getElementById("copDetails").innerHTML = JSON.stringify(data.copDetails);
-                L.mapbox.accessToken = 'pk.eyJ1Ijoia2FzaGlzaC1iZWhsIiwiYSI6ImNqbHdqb3RzazByaWkzdnBhc21xaWFlbmgifQ.wvRlT4eCwTC8E78SiFWN-g';
+                var mapDiv = document.getElementById('maps')
+                const mapOptions = {
+                    center: {
+                        lat: parseFloat(copDetails.location.latitude),
+                        lng: parseFloat(copDetails.location.longitude)
+                    },
+                    zoom :16
+                } 
+                console.log(mapOptions)
+                function makeMap(mapDiv, mapOptions){
+                    map = new google.maps.Map(mapDiv, mapOptions)
+                    var marker = new google.maps.Marker({position: mapOptions.center, map: map})
+                    console.log(map)
+                }
+                makeMap(mapDiv, mapOptions)
+                // L.mapbox.accessToken = 'pk.eyJ1Ijoia2FzaGlzaC1iZWhsIiwiYSI6ImNqbHdqb3RzazByaWkzdnBhc21xaWFlbmgifQ.wvRlT4eCwTC8E78SiFWN-g';
                 //Load the map and set it to a cop's lat-lng
-                map = L.mapbox.map('map', 'mapbox.streets');
-                map.setView([copDetails.location.latitude, copDetails.location.longitude], 15);
+                // map = L.mapbox.map('map', 'mapbox.streets');
+                // map.setView([copDetails.location.latitude, copDetails.location.longitude], 15);
                 //Display a default marker
-                marker = L.marker([copDetails.location.latitude, copDetails.location.longitude]).addTo(map);
+                // marker = L.marker([copDetails.location.latitude, copDetails.location.longitude]).addTo(map);
                 //Use MapBox geo-coding API
-                map.addControl(L.mapbox.geocoderControl('mapbox.places', {
-                    autocomplete: true,
-                }).on('select', function(data) {
+                // map.addControl(L.mapbox.geocoderControl('mapbox.places', {
+                    // autocomplete: true,
+                // }).on('select', function(data) {
                     //This function runs when a place is selected
                     //data contains the geocding results
-                    console.log(data);
+                    // console.log(data);
                     //Do something with the results
                     //Set the marker to new location
-                    marker.setLatLng([data.feature.center[1], data.feature.center[0]]);
-                }));
+                    // marker.setLatLng([data.feature.center[1], data.feature.center[0]]);
+                // }));
             },
             error: function(httpRequest, status, error) {
                 console.log(error);
@@ -83,12 +98,18 @@
             //display citizen info
             document.getElementById("notification").innerHTML = "You have a new request! \n" + JSON.stringify(requestDetails);
             //Show citizen location on the map
-            L.marker([requestDetails.location.latitude, requestDetails.location.longitude], {
-                icon: L.icon({
-                    iconUrl: '/images/citizen.png',
-                    iconSize: [50, 50]
-                })
-            }).addTo(map);
+            console.log(requestDetails)
+            const bounds = new google.maps.LatLngBounds()
+            const infoWindow = new google.maps.InfoWindow()
+            var position = { lat: requestDetails.location.latitude, lng: requestDetails.location.longitude}
+            console.log(map)
+            var icon = {
+                url: '/images/citizen.png',
+                scaledSize: new google.maps.Size(44,18)
+            }
+            const marker = new google.maps.Marker({map, position, location})
+            marker.place = requestDetails
+            console.log(marker)
         });
         function helpCitizen() {
             //On clicking the button, emit a 'request-accepted' event/signal and send relevant info back to server

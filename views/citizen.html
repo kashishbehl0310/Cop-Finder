@@ -52,21 +52,19 @@
         }
         //Listen for a 'request-accepted' event
         socket.on('request-accepted', function(data) {
-            copDetails = data; //Save cop details
-            //Display Cop details
-            document.getElementById("notification").innerHTML = "A cop is coming to your rescue! \n" + JSON.stringify(copDetails);
-            //Show cop location on the map
-            var icon = {
-                url: '/images/citizen.png',
-                scaledSize: new google.maps.Size(50,50)
-            }
-            // var marker = new google.maps.Marker({posit})
-            L.marker([copDetails.location.latitude, copDetails.location.longitude], {
-                icon: L.icon({
-                    iconUrl: '/images/police.png',
-                    iconSize: [60, 28]
-                })
-            }).addTo(map);
+            // copDetails = data; //Save cop details
+            // //Display Cop details
+            console.log('aaaaaaaaaaaaaaaaaaaaaaa')
+            // document.getElementById("notification").innerHTML = "A cop is coming to your rescue! \n" ;
+            // //Show cop location on the map
+
+            // // var marker = new google.maps.Marker({posit})
+            // L.marker([copDetails.location.latitude, copDetails.location.longitude], {
+            //     icon: L.icon({
+            //         iconUrl: '/images/police.png',
+            //         iconSize: [60, 28]
+            //     })
+            // }).addTo(map);
         });
 
         var mapDiv = document.getElementById('maps');

@@ -35,7 +35,6 @@ exports.saveRequests = (requestDetails, callback) => {
         if(err){
             console.log(err)
         }else{
-            console.log("success")
             callback(results)
         }
     })
