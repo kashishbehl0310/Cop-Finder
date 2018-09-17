@@ -39,6 +39,7 @@
         var requestDetails = {};
         var copDetails = {};
         var map;
+        var nearby = [];
         // var map, marker;
         requestDetails = {
             citizenId: userId,
@@ -69,23 +70,17 @@
                 url: '/images/citizen.png',
                 scaledSize: new google.maps.Size(50, 50)
             }
+            nearby = [];
             var marker = new google.maps.Marker({position: mapOptions.center, map: map, icon: icon})
-            loadNearest(map, mapOptions.center.lat, mapOptions.center.lng)
-            console.log(map)
+            loadNearest(map, mapOptions.center.lat, mapOptions.center.lng, nearby)
         }
+        // console.log(nearby)
         makeMap(mapDiv)
         socket.on('request-accepted', function(data) {
             copDetails = data;
             document.getElementById("notification").innerHTML = "A cop is coming to your rescue! \n"+JSON.stringify(copDetails);
             // //Show cop location on the map
             locateHelp(map, copDetails)
-            // // var marker = new google.maps.Marker({posit})
-            // L.marker([copDetails.location.latitude, copDetails.location.longitude], {
-            //     icon: L.icon({
-            //         iconUrl: '/images/police.png',
-            //         iconSize: [60, 28]
-            //     })
-            // }).addTo(map);
         });
         
     </script>
