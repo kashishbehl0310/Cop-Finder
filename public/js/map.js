@@ -1,5 +1,5 @@
 function loadNearest(map, lat, lng, nearby){
-    axios.get(`/cops?lat=${lat}&&lng=${lng}`)
+    return axios.get(`/cops?lat=${lat}&&lng=${lng}`)
     .then(res => {
         // console.log(res.data)
         const cops = res.data.cops;
@@ -20,11 +20,10 @@ function loadNearest(map, lat, lng, nearby){
             const marker = new google.maps.Marker({map, position, icon}) 
             marker.place = cop;
             nearby.push(marker) 
-            return nearby
         })
-        console.log(nearby)
         map.setCenter(bounds.getCenter());
         map.fitBounds(bounds);
+        return nearby
     }).catch(err => {
         console.log(err)
     })
@@ -42,11 +41,10 @@ function locateCitizen(map, requestDetails){
 // export default hello;
 
 function locateHelp(map, copDetails){
-    console.log(map, copDetails)
     const position = {lat: copDetails.location.latitude, lng: copDetails.location.longitude}
     const icon = {
-        url: "/images/citizen.png",
-        scaledSize: new google.maps.Size(50, 50)
+        url: "/images/police.png",
+        scaledSize: new google.maps.Size(44, 18)
     }
     const marker = new google.maps.Marker({map, position, icon})
     marker.place = copDetails

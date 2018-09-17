@@ -39,7 +39,7 @@
         var requestDetails = {};
         var copDetails = {};
         var map;
-        var nearby = [];
+        var nearby;
         // var map, marker;
         requestDetails = {
             citizenId: userId,
@@ -74,11 +74,20 @@
             var marker = new google.maps.Marker({position: mapOptions.center, map: map, icon: icon})
             loadNearest(map, mapOptions.center.lat, mapOptions.center.lng, nearby)
         }
-        // console.log(nearby)
         makeMap(mapDiv)
+        // console.log(nearby)
+        // console.log(map)
         socket.on('request-accepted', function(data) {
             copDetails = data;
             document.getElementById("notification").innerHTML = "A cop is coming to your rescue! \n"+JSON.stringify(copDetails);
+            // console.log(map)
+            loadNearest(map, mapOptions.center.lat, mapOptions.center.lng, nearby).then(data => {
+                for(var i=0; i< data.length; i++){
+                    data[i].setMap(null)
+                    // data = []
+                }
+                console.log(data)
+            })
             // //Show cop location on the map
             locateHelp(map, copDetails)
         });
