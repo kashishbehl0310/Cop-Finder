@@ -16,6 +16,9 @@ router.get('/cops', (req,res) => {
 router.get('/cops/info', copController.fetchCopDetails)
 router.get('/cop', copController.copPage)
 router.get('/citizen', copController.citizenPage)
+router.get('/login', (req, res) => {
+    res.render('login')
+})
 
 
 module.exports = router
