@@ -81,6 +81,29 @@
             copDetails = data;
             document.getElementById("notification").innerHTML = "A cop is coming to your rescue! \n"+JSON.stringify(copDetails);
             // console.log(map)
+            // console.log(copDetails)
+            function success(position){
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+                console.log(latitude + " " + longitude)
+            }
+            function error(err){
+                if(err.code === 1){
+                    console.log("Error: Access is denied")
+                }
+            }
+            function getLocationUpdates(){
+                var watchId = null;
+                if(navigator.geolocation){
+                    var options = {timeout: 600}
+                    watchId = navigator.geolocation.watchPosition(success, error, options)
+                }else{
+                    console.log("Browser does not support geolocation")
+                }
+            }
+            getLocationUpdates()
+
+            
             loadNearest(map, mapOptions.center.lat, mapOptions.center.lng, nearby).then(data => {
                 for(var i=0; i< data.length; i++){
                     data[i].setMap(null)
