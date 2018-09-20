@@ -48,4 +48,5 @@ function locateHelp(map, copDetails){
     }
     const marker = new google.maps.Marker({map, position, icon})
     marker.place = copDetails
+    return marker
 }

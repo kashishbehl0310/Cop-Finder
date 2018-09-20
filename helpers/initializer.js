@@ -39,4 +39,8 @@ exports.initialize = (socket, io) => {
         })
         // console.log(requestId)
     })
+
+    socket.on('update-location', (eventData) => {
+        console.log(eventData)
+    })
 }

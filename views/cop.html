@@ -89,11 +89,12 @@
             updateLocation()
         }
         function updateLocation(){
-            console.log(copDetails)
+            console.log(requestDetails)
             var updatedLocation = {}
             updatedLocation.latitude = ((copDetails.location.latitude) + (Math.random()/ 100))
             updatedLocation.longitude = ((copDetails.location.longitude) + (Math.random()/1000))
             console.log(updatedLocation)
+            socket.emit('update-location', updatedLocation)
         }
     </script>
 </body>
