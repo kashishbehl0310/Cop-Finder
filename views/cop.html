@@ -21,6 +21,9 @@
     <button onclick="helpCitizen()">
         Help Citizen
     </button>
+    <button onclick="updateLocation()">
+        Update Location
+    </button>
 
     <div id='maps' style='width: 600px; height: 400px;'></div>
 
@@ -86,15 +89,14 @@
                 requestDetails: requestDetails,
                 copDetails: copDetails
             });
-            updateLocation()
+            setInterval(updateLocation, 2000)
         }
         function updateLocation(){
-            console.log(requestDetails)
             var updatedLocation = {}
             updatedLocation.latitude = ((copDetails.location.latitude) + (Math.random()/ 100))
             updatedLocation.longitude = ((copDetails.location.longitude) + (Math.random()/1000))
             console.log(updatedLocation)
-            socket.emit('update-location', updatedLocation)
+            socket.emit('update-location', {updatedLocation, requestDetails})
         }
     </script>
 </body>

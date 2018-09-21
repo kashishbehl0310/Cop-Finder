@@ -46,7 +46,8 @@ function locateHelp(map, copDetails){
         url: "/images/police.png",
         scaledSize: new google.maps.Size(44, 18)
     }
-    const marker = new google.maps.Marker({map, position, icon})
-    marker.place = copDetails
+    marker = new google.maps.Marker({map, position, icon})
+    // marker.place = copDetails
     return marker
+    // return helpMarker
 }

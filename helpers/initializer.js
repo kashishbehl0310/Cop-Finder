@@ -41,6 +41,6 @@ exports.initialize = (socket, io) => {
     })
 
     socket.on('update-location', (eventData) => {
-        console.log(eventData)
+        io.sockets.in(eventData.requestDetails.citizenId).emit('update-location', eventData.updatedLocation)
     })
 }
