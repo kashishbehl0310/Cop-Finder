@@ -114,10 +114,10 @@
             // //Show cop location on the map
             locateHelp(map, copDetails)
         });
-        socket.on('update-location', function(eventData){
-            var locateHel = locateHelp(map, copDetails)
-           changeMarkerPosition(locateHel, eventData)
-        })
+        // socket.on('update-location', function(eventData){
+        //     var locateHel = locateHelp(map, copDetails)
+        //    changeMarkerPosition(locateHel, eventData)
+        // })
         function changeMarkerPosition(marker, position){
             var latlng = new google.maps.LatLng(position.latitude, position.longitude)
             marker.setPosition(latlng)

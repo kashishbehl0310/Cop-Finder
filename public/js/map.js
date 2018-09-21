@@ -47,6 +47,11 @@ function locateHelp(map, copDetails){
         scaledSize: new google.maps.Size(44, 18)
     }
     marker = new google.maps.Marker({map, position, icon})
+    marker.setMap(map)
+    socket.on('update-location', function(eventData){
+        var latlng = new google.maps.LatLng(eventData.latitude, eventData.longitude)
+        marker.setPosition(latlng)  
+    })
     // marker.place = copDetails
     return marker
     // return helpMarker
