@@ -32,6 +32,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9ycobB5RiavbXpJBo0Muz2komaqqvGv0&libraries=places"></script>    
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/javascript">
+
         var socket = io();
         //Fetch userId from the data-atribute of the body tag
         var userId = document.body.getAttribute("data-userId");
@@ -42,6 +43,7 @@
         var requestDetails = {};
         var copDetails = {};
         var map;
+        var markers = []
         //First send a GET request using JQuery AJAX and get the cop's details and save it
         $.ajax({
             url: '/cops/info?userId=' + userId,
@@ -66,9 +68,12 @@
                 function makeMap(mapDiv, mapOptions){
                     map = new google.maps.Map(mapDiv, mapOptions)
                     var marker = new google.maps.Marker({position: mapOptions.center, map: map})
-                    return map;
+                    markers.push(marker)
+                    return map, markers;
                 }
                 makeMap(mapDiv, mapOptions)
+                console.log(markers)
+                // var latlngBounds = new google.maps.LatLngBounds()
                 // console.log(map)
             },
             error: function(httpRequest, status, error) {
@@ -81,7 +86,7 @@
             //display citizen info
             document.getElementById("notification").innerHTML = "You have a new request! \n" + JSON.stringify(requestDetails);
             //Show citizen location on the map
-            locateCitizen(map, requestDetails)            
+            locateCitizen(map, requestDetails, markers)            
         });
         function helpCitizen() {
             //On clicking the button, emit a 'request-accepted' event/signal and send relevant info back to server
@@ -93,7 +98,7 @@
         }
         function updateLocation(){
             var updatedLocation = {}
-            updatedLocation.latitude = ((copDetails.location.latitude) + (Math.random()/ 100))
+            updatedLocation.latitude = ((copDetails.location.latitude) + (Math.random()/ 10000))
             updatedLocation.longitude = ((copDetails.location.longitude) + (Math.random()/1000))
             console.log(updatedLocation)
             socket.emit('update-location', {updatedLocation, requestDetails})

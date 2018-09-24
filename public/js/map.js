@@ -29,7 +29,7 @@ function loadNearest(map, lat, lng, nearby){
     })
 }
 
-function locateCitizen(map, requestDetails){
+function locateCitizen(map, requestDetails, markers){
     const position = {lat: requestDetails.location.latitude, lng: requestDetails.location.longitude}
     const icon = {
         url: '/images/citizen.png',
@@ -37,8 +37,15 @@ function locateCitizen(map, requestDetails){
     }
     const marker = new google.maps.Marker({map, position, icon})
     marker.place = requestDetails
+    markers.push(marker)
+    console.log(markers)
+    setRoute(markers)
 }
 // export default hello;
+
+function setRoute(markers){
+    console.log(markers.length)
+}
 
 function locateHelp(map, copDetails){
     const position = {lat: copDetails.location.latitude, lng: copDetails.location.longitude}
