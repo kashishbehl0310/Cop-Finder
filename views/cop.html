@@ -68,6 +68,7 @@
                 function makeMap(mapDiv, mapOptions){
                     map = new google.maps.Map(mapDiv, mapOptions)
                     var marker = new google.maps.Marker({position: mapOptions.center, map: map})
+                    marker.place = copDetails
                     markers.push(marker)
                     return map, markers;
                 }

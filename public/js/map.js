@@ -39,12 +39,42 @@ function locateCitizen(map, requestDetails, markers){
     marker.place = requestDetails
     markers.push(marker)
     console.log(markers)
-    setRoute(markers)
+    setRoute(markers, map)
 }
 // export default hello;
 
-function setRoute(markers){
-    console.log(markers.length)
+function setRoute(markers, map){
+    var lat_lng = new Array()
+    var latlngBounds = new google.maps.LatLngBounds()
+    for(var i=0; i< markers.length; i++){
+        var data = markers[i]
+        var myLatLng = new google.maps.LatLng(data.place.location.latitude, data.place.location.longitude)
+        lat_lng.push(myLatLng)
+    }
+    var path = new google.maps.MVCArray()
+    var service = new google.maps.DirectionsService()
+    var poly = new google.maps.Polyline({map, strokeColor: '#4986E7'})
+    for(var i=0; i< lat_lng.length; i++){
+        if((i + 1) < lat_lng.length){
+            var src = lat_lng[i]
+            var des = lat_lng[i+1]
+            path.push(src)
+            poly.setPath(path)
+            service.route({
+                origin: src,
+                destination: des,
+                travelMode: google.maps.DirectionsTravelMode.DRIVING
+            }, function(result, status){
+                if(status == google.maps.DirectionsStatus.OK){
+                    for(var i=0, len = result.routes[0].overview_path.length; i< len; i ++){
+                        path.push(result.routes[0].overview_path[i])
+                    }
+                }else{
+                    console.log("error")
+                }
+            })
+        }
+    }
 }
 
 function locateHelp(map, copDetails){
